@@ -1,21 +1,48 @@
-.annotation-container {
-  font-family: Arial, sans-serif;
+/* Root Styling */
+#root {
+  font-family: 'JetBrains Mono', monospace;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  color: #212529;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrolling */
+}
+
+/* App Container */
+#appContainer {
+  width: 100%;
+  max-width: 800px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* App Header */
+.app-header {
+  width: 100%;
+  height: 60px;
   text-align: center;
-  padding: 20px;
+  border-bottom: 1px solid #dee2e6;
 }
 
-.options-container {
-  margin: 20px 0;
+.app-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 60px;
 }
 
-.option-label {
-  display: block;
-  margin: 5px 0;
-}
-
-button {
-  margin: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+/* Main Content */
+.app-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }

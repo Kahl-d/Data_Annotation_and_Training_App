@@ -39,34 +39,32 @@ const SentenceAnnotation = () => {
 
   return (
     <div className="annotation-container">
-      <header className="app-header">
-        <h1>TACIT</h1>
-      </header>
-      <div className="content">
-        <div className="sentence-box">
+      <div className="sentence-box">
+        <h2>Sentence:</h2>
+        <div className="sentence-content">
           <p>{sentence}</p>
         </div>
-        {result !== null && (
-          <p className={`result ${result ? "correct" : "incorrect"}`}>
-            {result ? "Correct!" : `Correct Answer: ${correctLabel}`}
-          </p>
-        )}
-        <div className="options-container">
-          {CCTOptions.map((option, index) => (
-            <label
-              key={index}
-              className={`option-label ${userSelection === option ? "selected" : ""}`}
-            >
-              <input
-                type="radio"
-                value={option}
-                checked={userSelection === option}
-                onChange={(e) => setUserSelection(e.target.value)}
-              />
-              {option}
-            </label>
-          ))}
-        </div>
+      </div>
+      {result !== null && (
+        <p className={`result ${result ? "correct" : "incorrect"}`}>
+          {result ? "Correct!" : `Correct Answer: ${correctLabel}`}
+        </p>
+      )}
+      <div className="options-container">
+        {CCTOptions.map((option, index) => (
+          <label
+            key={index}
+            className={`option-label ${userSelection === option ? "selected" : ""}`}
+          >
+            <input
+              type="radio"
+              value={option}
+              checked={userSelection === option}
+              onChange={(e) => setUserSelection(e.target.value)}
+            />
+            {option}
+          </label>
+        ))}
       </div>
       <footer className="action-buttons">
         <button onClick={fetchSentence} className="navigation-button">
