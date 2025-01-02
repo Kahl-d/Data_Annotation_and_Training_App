@@ -1,0 +1,126 @@
+/* General Styling */
+body {
+    font-family: 'JetBrains Mono', monospace;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Light background */
+    color: #212529; /* Dark text */
+  }
+  
+  .annotation-container {
+    max-width: 800px;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #ffffff; /* White background */
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  .sentence-box {
+    margin-bottom: 20px;
+  }
+  
+  .result {
+    margin-top: 10px;
+    color: #28a745; /* Success green */
+  }
+  
+  .options-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+  
+  .option-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 10px;
+    border: 2px solid #ced4da;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #212529;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .option-label.selected {
+    border-color: #28a745;
+    background-color: #e9fbee;
+  }
+  
+  .option-label:hover {
+    background-color: #f1f3f5;
+  }
+  
+  input[type="radio"] {
+    display: none;
+  }
+  
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .navigation-button,
+  .submit-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .navigation-button {
+    background-color: #ced4da;
+    color: #212529;
+  }
+  
+  .navigation-button:hover {
+    background-color: #adb5bd;
+  }
+  
+  .submit-button {
+    background-color: #28a745;
+    color: #ffffff;
+  }
+  
+  .submit-button:disabled {
+    background-color: #ced4da;
+    color: #ffffff;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .options-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    .annotation-container {
+      padding: 10px;
+    }
+  }
+  

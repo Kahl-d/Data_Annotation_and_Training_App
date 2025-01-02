@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import "./SentenceAnnotation.css";
+import "./SentenceAnnotation.css";
 
 const SentenceAnnotation = () => {
   const [sentence, setSentence] = useState("");
@@ -8,7 +8,7 @@ const SentenceAnnotation = () => {
   const [result, setResult] = useState(null);
 
   const CCTOptions = [
-    "Attainment", "Aspirational", "Navigational", "Perseverance", "Resistance",
+    "Attainment", "Aspirational", "Navigational", "Perseverant", "Resistance",
     "Familial", "Filial", "First Gen", "Social", "Community", "Spiritual", "Class 0"
   ];
 
@@ -39,11 +39,21 @@ const SentenceAnnotation = () => {
 
   return (
     <div className="annotation-container">
-      <h1>Sentence Annotation</h1>
-      <p><strong>Sentence:</strong> {sentence}</p>
+      <h1>TACIT</h1>
+      <div className="sentence-box">
+        <p>{sentence}</p>
+        {result !== null && (
+          <p className="result">
+            {result ? "Correct!" : `Correct: ${correctLabel}`}
+          </p>
+        )}
+      </div>
       <div className="options-container">
         {CCTOptions.map((option, index) => (
-          <label key={index} className="option-label">
+          <label
+            key={index}
+            className={`option-label ${userSelection === option ? "selected" : ""}`}
+          >
             <input
               type="radio"
               value={option}
@@ -54,11 +64,21 @@ const SentenceAnnotation = () => {
           </label>
         ))}
       </div>
-      <button onClick={submitAnnotation} disabled={!userSelection}>Submit</button>
-      <button onClick={fetchSentence}>Next Sentence</button>
-      {result !== null && (
-        <p>{result ? "Correct!" : `Incorrect! The correct answer was ${correctLabel}.`}</p>
-      )}
+      <div className="action-buttons">
+        <button onClick={fetchSentence} className="navigation-button">
+          Previous
+        </button>
+        <button
+          onClick={submitAnnotation}
+          className="submit-button"
+          disabled={!userSelection}
+        >
+          Submit
+        </button>
+        <button onClick={fetchSentence} className="navigation-button">
+          Next
+        </button>
+      </div>
     </div>
   );
 };
