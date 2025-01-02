@@ -39,32 +39,36 @@ const SentenceAnnotation = () => {
 
   return (
     <div className="annotation-container">
-      <h1>TACIT</h1>
-      <div className="sentence-box">
-        <p>{sentence}</p>
+      <header className="app-header">
+        <h1>TACIT</h1>
+      </header>
+      <div className="content">
+        <div className="sentence-box">
+          <p>{sentence}</p>
+        </div>
         {result !== null && (
-          <p className="result">
-            {result ? "Correct!" : `Correct: ${correctLabel}`}
+          <p className={`result ${result ? "correct" : "incorrect"}`}>
+            {result ? "Correct!" : `Correct Answer: ${correctLabel}`}
           </p>
         )}
+        <div className="options-container">
+          {CCTOptions.map((option, index) => (
+            <label
+              key={index}
+              className={`option-label ${userSelection === option ? "selected" : ""}`}
+            >
+              <input
+                type="radio"
+                value={option}
+                checked={userSelection === option}
+                onChange={(e) => setUserSelection(e.target.value)}
+              />
+              {option}
+            </label>
+          ))}
+        </div>
       </div>
-      <div className="options-container">
-        {CCTOptions.map((option, index) => (
-          <label
-            key={index}
-            className={`option-label ${userSelection === option ? "selected" : ""}`}
-          >
-            <input
-              type="radio"
-              value={option}
-              checked={userSelection === option}
-              onChange={(e) => setUserSelection(e.target.value)}
-            />
-            {option}
-          </label>
-        ))}
-      </div>
-      <div className="action-buttons">
+      <footer className="action-buttons">
         <button onClick={fetchSentence} className="navigation-button">
           Previous
         </button>
@@ -78,7 +82,7 @@ const SentenceAnnotation = () => {
         <button onClick={fetchSentence} className="navigation-button">
           Next
         </button>
-      </div>
+      </footer>
     </div>
   );
 };
