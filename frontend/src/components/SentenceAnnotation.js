@@ -17,7 +17,7 @@ const SentenceAnnotation = () => {
   }, []);
 
   const fetchSentence = async () => {
-    const response = await fetch("http://127.0.0.1:5000/get-sentence");
+    const response = await fetch("https://t-lingo.onrender.com/get-sentence");
     const data = await response.json();
     setSentence(data.sentence);
     setCorrectLabel(data.cct_label);
@@ -26,7 +26,7 @@ const SentenceAnnotation = () => {
   };
 
   const submitAnnotation = async () => {
-    const response = await fetch("http://127.0.0.1:5000/submit-annotation", {
+    const response = await fetch("https://t-lingo.onrender.com/submit-annotation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
