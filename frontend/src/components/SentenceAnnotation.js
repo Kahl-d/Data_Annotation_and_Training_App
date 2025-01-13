@@ -13,28 +13,46 @@ const SentenceAnnotation = () => {
   ];
 
   useEffect(() => {
-    fetchSentence();
+    const pingBackend = async () => {
+      try {
+        // Send a simple GET request to wake up the backend
+        await fetch("https://t-lingo.onrender.com/");
+      } catch (error) {
+        console.error("Failed to wake up the backend:", error);
+      }
+    };
+
+    // Wake up the backend before fetching the sentence
+    pingBackend().then(fetchSentence);
   }, []);
 
   const fetchSentence = async () => {
-    const response = await fetch("https://t-lingo.onrender.com/get-sentence");
-    const data = await response.json();
-    setSentence(data.sentence);
-    setCorrectLabel(data.cct_label);
-    setResult(null);
-    setUserSelection("");
+    try {
+      const response = await fetch("https://t-lingo.onrender.com/get-sentence");
+      const data = await response.json();
+      setSentence(data.sentence);
+      setCorrectLabel(data.cct_label);
+      setResult(null);
+      setUserSelection("");
+    } catch (error) {
+      console.error("Failed to fetch sentence:", error);
+    }
   };
 
   const submitAnnotation = async () => {
-    const response = await fetch("https://t-lingo.onrender.com/submit-annotation", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user_selection: userSelection, correct_label: correctLabel }),
-    });
-    const data = await response.json();
-    setResult(data.is_correct);
+    try {
+      const response = await fetch("https://t-lingo.onrender.com/submit-annotation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_selection: userSelection, correct_label: correctLabel }),
+      });
+      const data = await response.json();
+      setResult(data.is_correct);
+    } catch (error) {
+      console.error("Failed to submit annotation:", error);
+    }
   };
 
   return (
