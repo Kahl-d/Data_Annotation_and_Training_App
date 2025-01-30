@@ -16,6 +16,20 @@ const SentenceAnnotation2 = () => {
     fetchSentence();
   }, []);
 
+  useEffect(() => {
+      const pingBackend = async () => {
+        try {
+          // Send a simple GET request to wake up the backend
+          await fetch("https://t-lingo.onrender.com/");
+        } catch (error) {
+          console.error("Failed to wake up the backend:", error);
+        }
+      };
+  
+      // Wake up the backend before fetching the sentence
+      pingBackend().then(fetchSentence);
+    }, []);
+
   const fetchSentence = async () => {
     try {
       const response = await fetch("http://127.0.0.1:5000/get-sentence");
