@@ -13,22 +13,19 @@ const SentenceAnnotation2 = () => {
   ];
 
   useEffect(() => {
-    fetchSentence();
+    // First, wake up the backend, then fetch the sentence
+    wakeUpBackend().then(() => {
+      setTimeout(fetchSentence, 1000); // Wait a few seconds to allow startup
+    });
   }, []);
 
-  useEffect(() => {
-      const pingBackend = async () => {
-        try {
-          // Send a simple GET request to wake up the backend
-          await fetch("https://t-lingo.onrender.com/");
-        } catch (error) {
-          console.error("Failed to wake up the backend:", error);
-        }
-      };
-  
-      // Wake up the backend before fetching the sentence
-      pingBackend().then(fetchSentence);
-    }, []);
+  const wakeUpBackend = async () => {
+    try {
+      await fetch("https://t-lingo.onrender.com/", { method: "GET" });
+    } catch (error) {
+      console.error("Failed to wake up the backend:", error);
+    }
+  };
 
   const fetchSentence = async () => {
     try {
