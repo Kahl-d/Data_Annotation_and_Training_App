@@ -1,5 +1,5 @@
 import React from "react";
-import SentenceAnnotation2 from "./components/SentenceAnnotation2";
+import SentenceAnnotation from "./components/SentenceAnnotation";
 import "./App.css";
 
 const App = () => {
@@ -9,7 +9,7 @@ const App = () => {
         <h1>TACIT</h1>
       </header>
       <main className="app-main">
-        <SentenceAnnotation2 />
+        <SentenceAnnotation />
       </main>
     </div>
   );
