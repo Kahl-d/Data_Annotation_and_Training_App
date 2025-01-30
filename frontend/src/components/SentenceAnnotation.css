@@ -28,7 +28,7 @@
   padding: 10px;
   border: 1px solid #dee2e6;
   border-radius: 5px;
-  overflow-y: auto; /* Allow scroll for long sentences */
+  overflow-y: auto;
   box-sizing: border-box;
 }
 
@@ -48,21 +48,18 @@
 /* Options Container */
 .options-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Desktop: 4 columns */
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   width: 100%;
   max-width: 800px;
 }
 
-@media (max-width: 600px) {
-  .options-container {
-    grid-template-columns: repeat(2, 1fr); /* Mobile: 2 columns */
-  }
-}
+
 
 .option-label {
   display: flex;
   justify-content: center;
+  
   align-items: center;
   height: 40px;
   border: 2px solid #ced4da;
@@ -72,13 +69,29 @@
   transition: all 0.3s;
 }
 
+/* Highlight when selecting before checking */
 .option-label.selected {
   border-color: #28a745;
   background-color: #e9fbee;
 }
 
-input[type="radio"] {
-  display: none;
+/* Highlight feedback after checking */
+.option-label.correct-highlight {
+  background-color: #28a745;
+  color: white;
+  border-color: #1e7e34;
+}
+
+.option-label.incorrect-highlight {
+  background-color: #dc3545;
+  color: white;
+  border-color: #a71d2a;
+}
+
+.option-label.missed-highlight {
+  background-color: orange;
+  color: white;
+  border-color: darkorange;
 }
 
 /* Action Buttons */
@@ -109,4 +122,32 @@ input[type="radio"] {
 
 .submit-button:disabled {
   background-color: #ced4da;
+}
+
+
+@media (max-width: 600px) {
+  .options-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .option-label {
+    height: fit-content;
+    padding: 10px 0;
+  }
+
+  .annotation-container{
+    margin-bottom: 2rem;
+  }
+
+  .sentence-content {
+    height: 100px;
+  }
+
+  .sentence-box {
+    font-size: 12px;
+  }
+
+  .option-label{
+    font-size: 15px;
+  }
 }
