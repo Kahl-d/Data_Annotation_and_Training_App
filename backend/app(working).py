@@ -7,8 +7,8 @@ import random
 app = Flask(__name__)
 CORS(app)
 
-# Path to updated dataset
-DATA_FILE = "./data/processed_cct_data.csv"
+# Path to dataset
+DATA_FILE = "./data/multi-cct-labels.csv"
 
 # Load dataset
 if not os.path.exists(DATA_FILE):
@@ -17,11 +17,11 @@ if not os.path.exists(DATA_FILE):
 df = pd.read_csv(DATA_FILE)
 
 # Ensure valid columns
-if "sentence" not in df.columns or "CCTs" not in df.columns:
-    raise ValueError("Dataset must contain 'sentence' and 'CCTs' columns.")
+if "sentence" not in df.columns or "cct_labels" not in df.columns:
+    raise ValueError("Dataset must contain 'sentence' and 'cct_labels' columns.")
 
-# Process CCT labels properly to ensure they are lists
-df["CCTs"] = df["CCTs"].apply(lambda x: [label.strip() for label in str(x).split(",") if label.strip()] if isinstance(x, str) else [])
+# Process CCT labels properly
+df["cct_labels"] = df["cct_labels"].apply(lambda x: [label.strip() for label in str(x).split(",")] if isinstance(x, str) else [])
 
 @app.route("/get-sentence", methods=["GET"])
 def get_sentence():
@@ -30,7 +30,7 @@ def get_sentence():
         row = df.sample(n=1).iloc[0]
         return jsonify({
             "sentence": row["sentence"],
-            "correct_labels": row["CCTs"]  # Keeping same API format for frontend compatibility
+            "correct_labels": row["cct_labels"]
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
