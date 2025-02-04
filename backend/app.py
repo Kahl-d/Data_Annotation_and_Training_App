@@ -27,7 +27,7 @@ if "sentence" not in df_class0.columns:
 # Process CCT labels properly
 df["CCTs"] = df["CCTs"].apply(lambda x: [label.strip() for label in str(x).split(",") if label.strip()] if isinstance(x, str) else [])
 
-df_class0["CCTs"] = [[] for _ in range(len(df_class0))]  # Assign empty CCT list to class 0 sentences
+df_class0["CCTs"] = [["Class 0"] for _ in range(len(df_class0))]  # Assign 'Class 0' label to class 0 sentences
 
 # Combine datasets
 df["category"] = "CCT"
@@ -59,7 +59,10 @@ def get_sampled_data():
     total_samples = len(df_combined)
     
     for category, percentage in cct_distribution.items():
-        category_df = df_combined[df_combined["category"].eq("Class0") if category == "Class0" else df_combined["CCTs"].apply(lambda x: category in x)]
+        if category == "Class0":
+            category_df = df_combined[df_combined["category"] == "Class0"]
+        else:
+            category_df = df_combined[df_combined["CCTs"].apply(lambda x: category in x)]
         sample_size = max(1, int((percentage / 100) * total_samples))
         sampled_data.append(category_df.sample(n=min(sample_size, len(category_df)), random_state=42))
     
