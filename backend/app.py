@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Path to dataset
-DATA_FILE = "processed_cct_data.csv"
+DATA_FILE = "processed-annotated-data.csv"
 
 # Load dataset
 if not os.path.exists(DATA_FILE):

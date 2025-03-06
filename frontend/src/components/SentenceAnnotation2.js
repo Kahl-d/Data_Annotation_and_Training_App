@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./SentenceAnnotation.css";
 
-const SentenceAnnotation2 = () => {
+const SentenceAnnotation = () => {
   const [sentence, setSentence] = useState("");
   const [correctLabels, setCorrectLabels] = useState([]);
   const [userSelection, setUserSelection] = useState([]);
   const [feedback, setFeedback] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const CCTOptions = [
     "Attainment", "Aspirational", "Navigational", "Perseverant", "Resistance",
@@ -14,8 +15,9 @@ const SentenceAnnotation2 = () => {
 
   useEffect(() => {
     // First, wake up the backend, then fetch the sentence
+    setLoading(true);
     wakeUpBackend().then(() => {
-      setTimeout(fetchSentence, 1000); // Wait a few seconds to allow startup
+      setTimeout(fetchSentence, 1000); // Wait a second to allow startup
     });
   }, []);
 
@@ -29,6 +31,7 @@ const SentenceAnnotation2 = () => {
 
   const fetchSentence = async () => {
     try {
+      setLoading(true);
       const response = await fetch("https://t-lingo.onrender.com/get-sentence");
       const data = await response.json();
 
@@ -38,16 +41,24 @@ const SentenceAnnotation2 = () => {
       setFeedback(null);
     } catch (error) {
       console.error("Failed to fetch sentence:", error);
-      setSentence("Error fetching sentence.");
+      setSentence("Error fetching sentence. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSelection = (option) => {
+    // Allow changes even after submission
     setUserSelection((prevSelection) =>
       prevSelection.includes(option)
         ? prevSelection.filter((item) => item !== option)
         : [...prevSelection, option]
     );
+    
+    // If we've already shown feedback, reset it so users can try again
+    if (feedback) {
+      setFeedback(null);
+    }
   };
 
   const checkAnswers = () => {
@@ -69,54 +80,95 @@ const SentenceAnnotation2 = () => {
 
   return (
     <div className="annotation-container">
-      <div className="sentence-box">
-        <h2>Sentence:</h2>
+      <header className="app-header">
+        <h1>T-Lingo Sentence Annotation</h1>
+      </header>
+      
+      <div className="sentence-card">
+        <h2>Analyze this sentence:</h2>
         <div className="sentence-content">
-          <p>{sentence}</p>
+          {loading ? (
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+              <p>Loading...</p>
+            </div>
+          ) : (
+            <p>{sentence}</p>
+          )}
         </div>
       </div>
 
-      <div className="options-container">
-        {CCTOptions.map((option, index) => {
-          let className = "option-label";
-          if (feedback) {
-            if (feedback.correct_selected.includes(option)) className += " correct-highlight";
-            else if (feedback.incorrect_selected.includes(option)) className += " incorrect-highlight";
-            else if (feedback.missed_correct.includes(option)) className += " missed-highlight";
-          } else if (userSelection.includes(option)) {
-            className += " selected";
-          }
+      <div className="annotation-section">
+        <h3>Select all applicable categories:</h3>
+        <div className="options-container">
+          {CCTOptions.map((option, index) => {
+            let className = "option-label";
+            
+            // Always show selection state first
+            if (userSelection.includes(option)) {
+              className += " selected";
+            }
+            
+            // Then apply feedback highlights if available
+            if (feedback) {
+              if (feedback.correct_selected.includes(option)) className += " correct-highlight";
+              else if (feedback.incorrect_selected.includes(option)) className += " incorrect-highlight";
+              else if (feedback.missed_correct.includes(option)) className += " missed-highlight";
+            }
 
-          return (
-            <div
-              key={index}
-              className={className}
-              onClick={() => handleSelection(option)}
-            >
-              {option}
-            </div>
-          );
-        })}
+            return (
+              <div
+                key={index}
+                className={className}
+                onClick={() => handleSelection(option)}
+              >
+                {option}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {feedback && (
         <div className="feedback-container">
-          <p><strong>✅ Correct Answers:</strong> {correctLabels.join(", ")}</p>
-          <p><strong>❌ Incorrect Choices:</strong> {feedback.incorrect_selected.join(", ") || "None"}</p>
-          <p><strong>⚠️ Missed Choices:</strong> {feedback.missed_correct.join(", ") || "None"}</p>
+          <div className="feedback-details">
+            <p>
+              <span className="feedback-icon correct">✓</span> 
+              <strong>Correct Answers:</strong> {correctLabels.join(", ")}
+            </p>
+            {feedback.incorrect_selected.length > 0 && (
+              <p>
+                <span className="feedback-icon incorrect">✗</span>
+                <strong>Incorrect Choices:</strong> {feedback.incorrect_selected.join(", ")}
+              </p>
+            )}
+            {feedback.missed_correct.length > 0 && (
+              <p>
+                <span className="feedback-icon missed">!</span>
+                <strong>Missed Choices:</strong> {feedback.missed_correct.join(", ")}
+              </p>
+            )}
+          </div>
         </div>
       )}
 
       <footer className="action-buttons">
-        <button onClick={fetchSentence} className="navigation-button">
-          Next Sentence
-        </button>
-        <button onClick={checkAnswers} className="submit-button" disabled={userSelection.length === 0}>
+        <button 
+          onClick={checkAnswers} 
+          className="submit-button" 
+          disabled={userSelection.length === 0}
+        >
           Check Answer
+        </button>
+        <button 
+          onClick={fetchSentence} 
+          className="next-button"
+        >
+          Next Sentence
         </button>
       </footer>
     </div>
   );
 };
 
-export default SentenceAnnotation2;
+export default SentenceAnnotation;
