@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Path to dataset
-DATA_FILE = "processed-annotated-data.csv"
+DATA_FILE = "processed_cct_data.csv"
 
 # Load dataset
 if not os.path.exists(DATA_FILE):
@@ -80,10 +80,15 @@ def get_sentence():
         sampled_df = get_sampled_data()
         row = sampled_df.sample(n=1).iloc[0]
         
-        # Return both the original CCTs string and the list format for flexibility
+        # Format the CCTs for compatibility with frontend
+        cct_string = row["CCTs"]
+        cct_list = [label.strip() for label in cct_string.split(",")]
+        
+        # Return both formats for flexibility
         return jsonify({
             "sentence": row["sentence"],
-            "correct_labels": row["CCTs"],  # String format (comma-separated)
+            "correct_labels": cct_list,  # Array format for better frontend compatibility
+            "correct_labels_str": cct_string,  # Original string format (comma-separated)
             "essay_id": row.get("essay_id", "Unknown")  # Include essay_id if available
         })
     except Exception as e:
