@@ -81,7 +81,7 @@ const SentenceAnnotation = () => {
   return (
     <div className="annotation-container">
       <header className="app-header">
-        <h1>T-Lingo Sentence Annotation</h1>
+        <h1>TACIT</h1>
       </header>
       
       <div className="sentence-card">
